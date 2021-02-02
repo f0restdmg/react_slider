@@ -2,9 +2,17 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import "./index.css";
 
-const Slider = ({ slides, loop, pags, delay = 5, auto, navs }) => {
+const Slider = ({
+  slides,
+  loop,
+  pags,
+  stopMouseHover,
+  delay = 5,
+  auto,
+  navs,
+}) => {
   if (!loop) auto = false;
-  
+
   let interval = `${delay}000`;
 
   const dotsArray = Array.from({ length: slides.length }, (item, index) => {
@@ -18,22 +26,38 @@ const Slider = ({ slides, loop, pags, delay = 5, auto, navs }) => {
 
   let [slide, setSlide] = useState(0);
 
+  const [slideHover, setSlideHover] = useState(stopMouseHover);
+
   const [dots, setDots] = useState(dotsArray);
 
   useEffect(() => {
+    let timer;
     if (auto) {
-      const timer = setTimeout(() => {
-        setSlide(slide === slides.length - 1 ? 0 : slide + 1);
-        setDot(slide === slides.length - 1 ? 0 : slide + 1);
-      }, interval);
+      if (stopMouseHover) {
+        if (slideHover) {
+          clearTimeout(timer);
+        }
+      } else {
+        timer = setTimeout(() => {
+          setSlide(slide === slides.length - 1 ? 0 : slide + 1);
+          setDot(slide === slides.length - 1 ? 0 : slide + 1);
+        }, interval);
+      }
+      if (slideHover) {
+        timer = setTimeout(() => {
+          setSlide(slide === slides.length - 1 ? 0 : slide + 1);
+          setDot(slide === slides.length - 1 ? 0 : slide + 1);
+        }, interval);
+      }
       return () => {
         clearTimeout(timer);
       };
     }
-  }, [auto, interval, slide, slides.length]);
+  }, [slide, slideHover]);
 
-  const setDot = useCallback((id) => {
-      const newDots = dots.map(item => {
+  const setDot = useCallback(
+    (id) => {
+      const newDots = dots.map((item) => {
         if (item.id === id) {
           item.isChecked = true;
         } else {
@@ -73,10 +97,10 @@ const Slider = ({ slides, loop, pags, delay = 5, auto, navs }) => {
 
   return (
     <div className="container mt-5">
-      <div 
+      <div
         className="slider__container"
-        onMouseOver={() => console.log('in')}
-        onMouseLeave={() => console.log('out')}
+        onMouseEnter={() => setSlideHover(false)}
+        onMouseLeave={() => setSlideHover(true)}
       >
         <div className="slider__counter">
           <span className="slider__counter--start">{slide + 1}</span>/

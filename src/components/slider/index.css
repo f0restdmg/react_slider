@@ -23,6 +23,7 @@
   width: 100%;
   position: relative;
 }
+
 .slide_item .slider__img{
   width: 100%;
   object-fit: cover;

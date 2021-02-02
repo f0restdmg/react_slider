@@ -1,5 +1,5 @@
-import React from 'react';
-import Slider from './components/slider/Slider';
+import React from "react";
+import Slider from "./components/slider/Slider";
 
 let slides = [
   {
@@ -14,14 +14,20 @@ let slides = [
     img: "https://www.w3schools.com/howto/img_mountains_wide.jpg",
     text: "Caption Text 3",
   },
-]
+];
 
 const App = () => {
   return (
-    <>
-      <Slider slides={slides} loop={true} navs={true} auto={true} pags={true} delay={3} />
-    </>
+    <Slider
+      slides={slides}
+      loop={true}
+      navs={true}
+      auto={true}
+      stopMouseHover={true}
+      pags={true}
+      delay={2}
+    />
   );
-}
+};
 
 export default App;
